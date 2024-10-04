@@ -1,9 +1,11 @@
 {
   "tasks": {
-    "dev": "deno run --allow-net --watch main.ts"
+    "dev": "deno run --allow-net --watch main.ts",
+    "lint": "deno lint"
   },
   "imports": {
-    "hono": "npm:hono@4.6.3"
+    "hono": "npm:hono@4.6.3",
+    "@/": "./"
   },
   "compilerOptions": {
     "jsx": "precompile",
