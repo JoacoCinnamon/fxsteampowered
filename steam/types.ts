@@ -8,10 +8,12 @@ export type SteamGameAppApiErrorResponse = {
   };
 } | null;
 
+export type SteamAppData = GameAppData | DlcAppData;
+
 export type SteamGameAppApiSuccessResponse = {
   [key: string]: {
     success: true;
-    data: GameAppData | DlcAppData;
+    data: SteamAppData;
   };
 };
 
@@ -38,15 +40,16 @@ export type GameAppData = {
   /** Official Page */
   website: string;
   /** HTML */
-  pc_requirements: Requirement;
+  pc_requirements: Requirement | [];
   /** HTML */
-  mac_requirements: Requirement;
+  mac_requirements: Requirement | [];
   /** HTML */
-  linux_requirements: Requirement;
+  linux_requirements: Requirement | [];
   legal_notice: string;
   developers: string[];
   publishers: string[];
-  price_overview: PriceOverview;
+  price_overview: PriceOverview | null | undefined;
+  demos: Demo[] | null | undefined;
   packages: number[];
   package_groups: PackageGroup[];
   platforms: Platforms;
@@ -54,8 +57,8 @@ export type GameAppData = {
   categories: Category[];
   genres: Genre[];
   screenshots: Screenshot[];
-  movies: Movie[];
-  recommendations: Recommendations;
+  movies: Movie[] | null | undefined;
+  recommendations: Recommendations | null | undefined;
   achievements: Achievements;
   release_date: ReleaseDate;
   support_info: SupportInfo;
@@ -100,8 +103,8 @@ export type DlcAppData = {
   categories: Category[];
   genres: Genre[];
   screenshots: Screenshot[];
-  movies: Movie[];
-  recommendations: Recommendations;
+  movies: Movie[] | null | undefined;
+  recommendations: Recommendations | null | undefined;
   achievements: Achievements;
   release_date: ReleaseDate;
   support_info: SupportInfo;
@@ -196,6 +199,11 @@ export type PriceOverview = {
   discount_percent: number;
   initial_formatted: string;
   final_formatted: string;
+};
+
+export type Demo = {
+  appid: SteamAppId;
+  description: string;
 };
 
 export type Ratings = {

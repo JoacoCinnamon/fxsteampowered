@@ -4,12 +4,13 @@ import {
 } from "@/steam/consts.ts";
 import { Err, Ok, to } from "@/utils/helpers.ts";
 import type {
+  GameAppData,
+  SteamAppData,
   SteamGameAppApiErrorResponse,
   SteamGameAppApiResponse,
-  SteamGameAppApiSuccessResponse,
 } from "@/steam/types.ts";
 
-export const getGameUrl = (gameId: string) =>
+export const getAppUrl = (gameId: string) =>
   `${STORE_STEAMPOWERED_URL}/app/${gameId}?cc=AR`;
 
 export async function fetchSteamApp(gameId: string) {
@@ -58,8 +59,7 @@ export function isSteamApiResponseError(
 }
 
 export function isSteamGame(
-  appId: string,
-  appResponse: SteamGameAppApiSuccessResponse,
-) {
-  return appResponse[appId].data.type === "game";
+  appData: SteamAppData,
+): appData is GameAppData {
+  return appData.type === "game";
 }
