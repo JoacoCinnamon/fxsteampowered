@@ -16,7 +16,7 @@ export const SteamAppVideo = async (
   let steamAppMetaTags: { name: string; content: string }[] = [];
 
   if (steamApp.movies && steamApp.movies.length > 0) {
-    const [videoUrl] = steamApp.movies[0].mp4["480"].split("?t=");
+    const [videoUrl] = steamApp.movies[0].webm["480"].split("?t=");
     steamAppMetaTags = [
       {
         name: "og:video",
@@ -42,36 +42,12 @@ export const SteamAppVideo = async (
         name: "twitter:player",
         content: videoUrl,
       },
-      {
-        name: "twitter:image",
-        content: steamApp.movies[0].thumbnail,
-      },
-      {
-        name: "og:image",
-        content: steamApp.movies[0].thumbnail,
-      },
-      {
-        name: "og:image:type",
-        content: "image/jpg",
-      },
     ];
   } else {
     steamAppMetaTags = [
       {
-        name: "twitter:image",
-        content: steamApp.header_image,
-      },
-      {
         name: "og:type",
         content: "image",
-      },
-      {
-        name: "og:image",
-        content: steamApp.header_image,
-      },
-      {
-        name: "og:image:type",
-        content: "image/jpg",
       },
       {
         name: "twitter:card",
@@ -119,6 +95,18 @@ export const SteamAppVideo = async (
         {
           name: "twitter:url",
           content: appUrl,
+        },
+        {
+          name: "twitter:image",
+          content: steamApp.header_image,
+        },
+        {
+          name: "og:image",
+          content: steamApp.header_image,
+        },
+        {
+          name: "og:image:type",
+          content: "image/jpg",
         },
         ...steamAppMetaTags,
       ]}
