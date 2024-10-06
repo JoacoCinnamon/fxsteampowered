@@ -35,14 +35,6 @@ export const SteamAppVideo = async (
         content: "video/webm",
       },
       {
-        name: "og:video:width",
-        content: "auto",
-      },
-      {
-        name: "og:video:height",
-        content: "auto",
-      },
-      {
         name: "twitter:card",
         content: "player",
       },
