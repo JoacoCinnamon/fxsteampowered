@@ -16,7 +16,7 @@ export const getAppUrl = (gameId: string) =>
 export async function fetchSteamApp(gameId: string) {
   const [err, res] = await to(
     fetch(
-      `${STORE_STEAMPOWERED_API_URL}/appdetails?appids=${gameId}&cc=arg&l=es`,
+      `${STORE_STEAMPOWERED_API_URL}/appdetails?appids=${gameId}&cc=ar&l=es`,
       {
         headers: {
           "user-agent":
