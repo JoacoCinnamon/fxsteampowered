@@ -36,7 +36,7 @@ app.get("/app/:id/", async (c) => {
     return c.text("There is no game with that id", 404);
   }
 
-  const responseContent = SteamAppVideo({ app: appResponse[appId].data });
+  const responseContent = SteamAppVideo({ steamApp: appResponse[appId].data });
   return c.html(responseContent, 200, {
     "Cache-Control": "public, max-age=3600",
   });
@@ -54,9 +54,9 @@ app.get("/app/:id/:slug/", async (c) => {
   if (isSteamApiResponseError(appId, appResponse)) {
     return c.text("There is no game with that id", 404);
   }
+  const steamApp = appResponse[appId].data;
 
-  const responseContent = SteamAppVideo({ app: appResponse[appId].data });
-  return c.html(responseContent, 200, {
+  return c.html(SteamAppVideo({ steamApp }), 200, {
     "Cache-Control": "public, max-age=3600",
   });
 });

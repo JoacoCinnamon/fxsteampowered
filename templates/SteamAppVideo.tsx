@@ -3,20 +3,20 @@ import { getAppUrl } from "@/steam/services.ts";
 import { BaseHtml } from "@/templates/BaseHtml.tsx";
 import type { SteamAppData } from "@/steam/types.ts";
 import { Buffer } from "node:buffer";
+import { formatPrice } from "@/currencies/helpers.ts";
 
 type SteamAppProps = {
-  app: SteamAppData;
+  steamApp: SteamAppData;
 };
 
-const showReleaseDate = (releaseDate: string) =>
-  `${releaseDate !== "Coming soon" ? `(${releaseDate})` : ""}`;
-
-export const SteamAppVideo = ({ app }: PropsWithChildren<SteamAppProps>) => {
-  const appUrl = getAppUrl(app.steam_appid.toString());
+export const SteamAppVideo = async (
+  { steamApp }: PropsWithChildren<SteamAppProps>,
+) => {
+  const appUrl = getAppUrl(steamApp.steam_appid.toString());
   let steamAppMetaTags: { name: string; content: string }[] = [];
 
-  if (app.movies && app.movies.length > 0) {
-    const videoUrl = app.movies[0].webm["480"];
+  if (steamApp.movies && steamApp.movies.length > 0) {
+    const videoUrl = steamApp.movies[0].webm["480"];
     steamAppMetaTags = [
       {
         name: "og:video",
@@ -64,21 +64,13 @@ export const SteamAppVideo = ({ app }: PropsWithChildren<SteamAppProps>) => {
     ];
   }
 
-  // TODO: DolarCripto Price
-  let price = "";
-  if (app.is_free) {
-    price = "Gratis";
-  } else if (app.price_overview) {
-    price = app.price_overview.final_formatted;
-  } else if (app.release_date.coming_soon) {
-    price = `Muy Pronto ${showReleaseDate(app.release_date.date)}`;
-  }
+  const price = await formatPrice(steamApp);
 
   const alternate = {
-    title: Buffer.from(app.name).toString("base64"),
-    description: Buffer.from(app.short_description).toString("base64"),
+    title: Buffer.from(steamApp.name).toString("base64"),
+    description: Buffer.from(steamApp.short_description).toString("base64"),
     price: Buffer.from(price).toString("base64"),
-    appId: app.steam_appid,
+    appId: steamApp.steam_appid,
   };
 
   return (
@@ -98,7 +90,7 @@ export const SteamAppVideo = ({ app }: PropsWithChildren<SteamAppProps>) => {
         },
         {
           name: "twitter:creator",
-          content: app.developers[0],
+          content: steamApp.developers[0],
         },
         {
           name: "twitter:title",
@@ -114,11 +106,11 @@ export const SteamAppVideo = ({ app }: PropsWithChildren<SteamAppProps>) => {
         },
         {
           name: "twitter:image",
-          content: app.header_image,
+          content: steamApp.header_image,
         },
         {
           name: "og:image",
-          content: app.header_image,
+          content: steamApp.header_image,
         },
         {
           name: "og:image:type",
@@ -128,7 +120,7 @@ export const SteamAppVideo = ({ app }: PropsWithChildren<SteamAppProps>) => {
       ]}
       alternate={alternate}
     >
-      <title>{app.name}</title>
+      <title>{steamApp.name}</title>
     </BaseHtml>
   );
 };
