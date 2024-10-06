@@ -10,15 +10,24 @@ export const parsePesosToNumber = (pesos: string) =>
 const showReleaseDate = (releaseDate: string) =>
   `${releaseDate !== "Coming soon" ? `(${releaseDate})` : ""}`;
 
+const arsFormatter = new Intl.NumberFormat("es-AR", {
+  style: "decimal",
+  currency: "ARS",
+});
+
 export async function formatPrice(steamApp: SteamAppData) {
   const { date } = steamApp.release_date;
-  if (steamApp.release_date.coming_soon) return `Muy Pronto ${showReleaseDate(date)}`;
+  if (steamApp.release_date.coming_soon) {
+    return `Muy Pronto ${showReleaseDate(date)}`;
+  }
   if (steamApp.is_free) return "Gratis";
 
   if (steamApp.price_overview) {
     const dollarAmount = centsToDollars(steamApp.price_overview.final);
     const dolarCriptoAmount = await convertDollarToARS(dollarAmount);
-    return `💲 USD $${dollarAmount} 🧉 ARS $${dolarCriptoAmount}`;
+    return `💲 USD $${dollarAmount} 🧉 ARS $${
+      arsFormatter.format(dolarCriptoAmount)
+    }`;
   }
 
   return "Precio no disponible";

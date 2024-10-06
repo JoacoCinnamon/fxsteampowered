@@ -41,5 +41,5 @@ export async function convertDollarToARS(dollarAmount: number) {
     ? parsePesosToNumber(ambitoFinancieroData.venta)
     : DEFAULT_DOLAR_CRIPTO_PRICE;
 
-  return dollarAmount * dolarCriptoAmount;
+  return Number((dollarAmount * dolarCriptoAmount).toFixed(2));
 }
