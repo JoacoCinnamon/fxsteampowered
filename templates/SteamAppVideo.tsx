@@ -20,6 +20,14 @@ export const SteamAppVideo = ({ app }: PropsWithChildren<SteamAppProps>) => {
         content: videoUrl
       },
       {
+        name: "og:video:secure_url",
+        content: videoUrl
+      },
+      {
+        name: "og:type",
+        content: "video"
+      },
+      {
         name: "og:video:type",
         content: "video/webm"
       },
@@ -32,32 +40,16 @@ export const SteamAppVideo = ({ app }: PropsWithChildren<SteamAppProps>) => {
         content: "auto"
       },
       {
-        name: "og:type",
-        content: "video"
-      },
-      {
         name: "twitter:card",
         content: "player"
+      },
+      {
+        name: "twitter:player",
+        content: videoUrl
       }
     ];
   } else {
     steamAppMetaTags = [
-      {
-        name: "og:image",
-        content: app.header_image
-      },
-      {
-        name: "og:image:type",
-        content: "image/jpg"
-      },
-      {
-        name: "og:image:width",
-        content: "auto"
-      },
-      {
-        name: "og:image:height",
-        content: "auto"
-      },
       {
         name: "og:type",
         content: "image.other"
@@ -87,37 +79,53 @@ export const SteamAppVideo = ({ app }: PropsWithChildren<SteamAppProps>) => {
 
   return <BaseHtml tags={[
     {
+      name: "og:url",
+      content: appUrl
+    },
+    {
       name: "og:title",
       content: title.trim()
     },
     {
       name: "theme-color",
-      content: "#171d25" // TikTok"s theme color
+      content: "#171d25" // Steam theme color
     },
-    // {
-    //   name: "twitter:site",
-    //   content: `${data.author.uniqueId}`
-    // },
     {
       name: "twitter:creator",
-      content: `@${app.developers[0]}`
+      content: app.developers[0]
     },
     {
       name: "twitter:title",
-      content: `${app.short_description}` // Description
+      content: title.trim()
     },
     {
-      name: "og:url",
+      name: "twitter:domain",
+      content: "store.steampowered"
+    },
+    {
+      name: "twitter:url",
       content: appUrl
     },
-    ...(!app.movies || app.movies.length === 0
-      ? [
-        {
-          name: "og:description",
-          content: app.short_description
-        }
-      ]
-      : []),
+    {
+      name: "twitter:image",
+      content: app.header_image
+    },
+    {
+      name: "og:image",
+      content: app.header_image
+    },
+    {
+      name: "og:image:type",
+      content: "image/jpg"
+    },
+    {
+      name: "og:image:width",
+      content: "auto"
+    },
+    {
+      name: "og:image:height",
+      content: "auto"
+    },
     ...steamAppMetaTags
   ]}
     alternate={alternate}>
