@@ -124,14 +124,6 @@ export const SteamAppVideo = ({ app }: PropsWithChildren<SteamAppProps>) => {
           name: "og:image:type",
           content: "image/jpg",
         },
-        {
-          name: "og:image:width",
-          content: "auto",
-        },
-        {
-          name: "og:image:height",
-          content: "auto",
-        },
         ...steamAppMetaTags,
       ]}
       alternate={alternate}
