@@ -35,9 +35,9 @@ app.get("/app/:id/", async (c) => {
   if (isSteamApiResponseError(appId, appResponse)) {
     return c.text("There is no game with that id", 404);
   }
+  const steamApp = appResponse[appId].data;
 
-  const responseContent = SteamAppVideo({ steamApp: appResponse[appId].data });
-  return c.html(responseContent, 200, {
+  return c.html(SteamAppVideo({ steamApp }), 200, {
     "Cache-Control": "public, max-age=3600",
   });
 });
