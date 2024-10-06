@@ -2,6 +2,14 @@ import type { Context } from "hono";
 import { Buffer } from "node:buffer";
 import { getAppUrl } from "@/steam/services.ts";
 
+function decodeURIParam(param: string | null | undefined) {
+  return param
+    ? decodeURIComponent(
+      Buffer.from(decodeURIComponent(param), "base64").toString("utf-8"),
+    )
+    : "";
+}
+
 /**
  * Extracted from https://github.com/okdargy/fxTikTok/blob/hono-rewrite/src/util/generateAlternate.tsx
  */
@@ -14,14 +22,12 @@ export default function generateAlternate(c: Context): {
   provider_url: string;
   title: string;
 } {
-  const { appTitle, appId, description } = c.req.query();
+  const { title, description, price, appId } = c.req.query();
   const appUrl = getAppUrl(appId);
 
-  const decodedDescription = description
-    ? decodeURIComponent(
-      Buffer.from(decodeURIComponent(description), "base64").toString("utf-8"),
-    )
-    : "";
+  const decodedTitle = decodeURIParam(title);
+  const decodedDescription = decodeURIParam(description);
+  const decodedPrice = decodeURIParam(price);
   // Some Discord embed values are limited to 256 characters, truncate if necessary
   // See more: https://www.pythondiscord.com/pages/guides/python-guides/discord-embed-limits/
   const truncatedDescription = decodedDescription.length > 256
@@ -33,9 +39,8 @@ export default function generateAlternate(c: Context): {
     type: "link",
     author_name: truncatedDescription || "fxSteamPowered - Embed",
     author_url: appUrl,
-    // Price/Metadata
-    provider_name: `${decodeURIComponent(appTitle)}`,
+    provider_name: `${decodeURIComponent(decodedTitle)}`,
     provider_url: appUrl,
-    title: appTitle,
+    title: decodedPrice,
   };
 }

@@ -2,11 +2,14 @@ import type { PropsWithChildren } from "hono/jsx";
 import { getAppUrl } from "@/steam/services.ts";
 import { BaseHtml } from "@/templates/BaseHtml.tsx";
 import type { SteamAppData } from "@/steam/types.ts";
-import { Buffer } from 'node:buffer';
+import { Buffer } from "node:buffer";
 
 type SteamAppProps = {
   app: SteamAppData;
-}
+};
+
+const showReleaseDate = (releaseDate: string) =>
+  `${releaseDate !== "Coming soon" ? `(${releaseDate})` : ""}`;
 
 export const SteamAppVideo = ({ app }: PropsWithChildren<SteamAppProps>) => {
   const appUrl = getAppUrl(app.steam_appid.toString());
@@ -17,118 +20,123 @@ export const SteamAppVideo = ({ app }: PropsWithChildren<SteamAppProps>) => {
     steamAppMetaTags = [
       {
         name: "og:video",
-        content: videoUrl
+        content: videoUrl,
       },
       {
         name: "og:video:secure_url",
-        content: videoUrl
+        content: videoUrl,
       },
       {
         name: "og:type",
-        content: "video"
+        content: "video",
       },
       {
         name: "og:video:type",
-        content: "video/webm"
+        content: "video/webm",
       },
       {
         name: "og:video:width",
-        content: "auto"
+        content: "auto",
       },
       {
         name: "og:video:height",
-        content: "auto"
+        content: "auto",
       },
       {
         name: "twitter:card",
-        content: "player"
+        content: "player",
       },
       {
         name: "twitter:player",
-        content: videoUrl
-      }
+        content: videoUrl,
+      },
     ];
   } else {
     steamAppMetaTags = [
       {
         name: "og:type",
-        content: "image.other"
+        content: "image.other",
       },
       {
         name: "twitter:card",
-        content: "summary_large_image"
-      }
+        content: "summary_large_image",
+      },
     ];
   }
 
   // TODO: DolarCripto Price
-  let title = ""
+  let price = "";
   if (app.is_free) {
-    title = "Gratis"
+    price = "Gratis";
   } else if (app.price_overview) {
-    title = app.price_overview.final_formatted
+    price = app.price_overview.final_formatted;
   } else if (app.release_date.coming_soon) {
-    title = `Muy Pronto ${app.release_date.date !== "Coming soon" ? `(${app.release_date.date})` : ""}`
+    price = `Muy Pronto ${showReleaseDate(app.release_date.date)}`;
   }
 
   const alternate = {
-    unique_id: app.name,
-    nickname: app.name,
-    description: Buffer.from(app.short_description).toString('base64')
-  }
+    title: Buffer.from(app.name).toString("base64"),
+    description: Buffer.from(app.short_description).toString("base64"),
+    price: Buffer.from(price).toString("base64"),
+    appId: app.steam_appid,
+  };
 
-  return <BaseHtml tags={[
-    {
-      name: "og:url",
-      content: appUrl
-    },
-    {
-      name: "og:title",
-      content: title.trim()
-    },
-    {
-      name: "theme-color",
-      content: "#171d25" // Steam theme color
-    },
-    {
-      name: "twitter:creator",
-      content: app.developers[0]
-    },
-    {
-      name: "twitter:title",
-      content: title.trim()
-    },
-    {
-      name: "twitter:domain",
-      content: "store.steampowered"
-    },
-    {
-      name: "twitter:url",
-      content: appUrl
-    },
-    {
-      name: "twitter:image",
-      content: app.header_image
-    },
-    {
-      name: "og:image",
-      content: app.header_image
-    },
-    {
-      name: "og:image:type",
-      content: "image/jpg"
-    },
-    {
-      name: "og:image:width",
-      content: "auto"
-    },
-    {
-      name: "og:image:height",
-      content: "auto"
-    },
-    ...steamAppMetaTags
-  ]}
-    alternate={alternate}>
-    <title>{app.name}</title>
-  </BaseHtml>
-}
+  return (
+    <BaseHtml
+      tags={[
+        {
+          name: "og:url",
+          content: appUrl,
+        },
+        {
+          name: "og:title",
+          content: price.trim(),
+        },
+        {
+          name: "theme-color",
+          content: "#171d25", // Steam theme color
+        },
+        {
+          name: "twitter:creator",
+          content: app.developers[0],
+        },
+        {
+          name: "twitter:title",
+          content: price.trim(),
+        },
+        {
+          name: "twitter:domain",
+          content: "store.steampowered",
+        },
+        {
+          name: "twitter:url",
+          content: appUrl,
+        },
+        {
+          name: "twitter:image",
+          content: app.header_image,
+        },
+        {
+          name: "og:image",
+          content: app.header_image,
+        },
+        {
+          name: "og:image:type",
+          content: "image/jpg",
+        },
+        {
+          name: "og:image:width",
+          content: "auto",
+        },
+        {
+          name: "og:image:height",
+          content: "auto",
+        },
+        ...steamAppMetaTags,
+      ]}
+      alternate={alternate}
+    >
+      <title>{app.name}</title>
+    </BaseHtml>
+  );
+};
