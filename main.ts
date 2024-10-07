@@ -62,14 +62,8 @@ app.get("/app/:id/:slug/", async (c) => {
 });
 
 app.get("/generate/alternate", (c) => {
-  const content = JSON.stringify(generateAlternate(c));
-
-  return new Response(content, {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "public, max-age=3600",
-    },
+  return c.json(generateAlternate(c), 200, {
+    "Cache-Control": "public, max-age=3600",
   });
 });
 
