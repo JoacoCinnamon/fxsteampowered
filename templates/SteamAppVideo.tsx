@@ -45,19 +45,19 @@ export const SteamAppVideo = async (
       },
       {
         name: "twitter:player:width",
-        content: "854",
+        content: "1200",
       },
       {
         name: "twitter:player:height",
-        content: "480",
+        content: "600",
       },
       {
         name: "og:image:width",
-        content: "854",
+        content: "1200",
       },
       {
         name: "og:image:height",
-        content: "480",
+        content: "600",
       },
     ];
   } else {
