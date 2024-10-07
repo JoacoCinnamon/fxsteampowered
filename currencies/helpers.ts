@@ -16,18 +16,19 @@ const arsFormatter = new Intl.NumberFormat("es-AR", {
 });
 
 export async function formatPrice(steamApp: SteamAppData) {
-  const { date } = steamApp.release_date;
-  if (steamApp.release_date.coming_soon) {
-    return `Muy Pronto ${showReleaseDate(date)}`;
-  }
-  if (steamApp.is_free) return "Gratis";
-
+  const { coming_soon, date } = steamApp.release_date;
   if (steamApp.price_overview) {
     const dollarAmount = centsToDollars(steamApp.price_overview.final);
     const dolarCriptoAmount = await convertDollarToARS(dollarAmount);
     return `💲 USD $${dollarAmount} 🧉 ARS $${
       arsFormatter.format(dolarCriptoAmount)
-    }`;
+    } ${coming_soon ? showReleaseDate(date) : ""}`;
+  }
+  if (steamApp.is_free) {
+    return `Gratis ${coming_soon ? showReleaseDate(date) : ""}`;
+  }
+  if (coming_soon) {
+    return `Muy Pronto ${showReleaseDate(date)}`;
   }
 
   return "Precio no disponible";
