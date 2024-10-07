@@ -1,6 +1,7 @@
 import type { Context } from "hono";
 import { Buffer } from "node:buffer";
 import { getAppUrl } from "@/steam/services.ts";
+import { STORE_STEAMPOWERED_URL } from "@/steam/consts.ts";
 
 function decodeURIParam(param: string | null | undefined) {
   return param
@@ -23,8 +24,8 @@ export default function generateAlternate(c: Context): {
   title: string;
 } {
   const { title, description, price, appId } = c.req.query();
-  const appUrl = getAppUrl(appId);
 
+  const appUrl = appId ? getAppUrl(appId) : STORE_STEAMPOWERED_URL;
   const decodedTitle = decodeURIParam(title);
   const decodedDescription = decodeURIParam(description);
   const decodedPrice = decodeURIParam(price);
@@ -39,7 +40,7 @@ export default function generateAlternate(c: Context): {
     type: "link",
     author_name: truncatedDescription || "fxSteamPowered - Embed",
     author_url: appUrl,
-    provider_name: `${decodeURIComponent(decodedTitle)}`,
+    provider_name: decodedTitle,
     provider_url: appUrl,
     title: decodedPrice,
   };
