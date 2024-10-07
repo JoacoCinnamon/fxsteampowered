@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { serveStatic } from "hono/deno";
 import { logger } from "hono/logger";
 import { appendTrailingSlash } from "hono/trailing-slash";
 
@@ -11,6 +12,7 @@ const app = new Hono({ strict: true });
 
 app.use(logger());
 app.use(appendTrailingSlash());
+app.use("/favicon.ico", serveStatic({ path: "./favicon.ico" }));
 
 app.get("/", () => {
   return new Response(null, {
