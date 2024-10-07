@@ -42,6 +42,14 @@ export const SteamAppVideo = async (
         name: "twitter:player",
         content: videoUrl,
       },
+      {
+        name: "og:image:width",
+        content: "854",
+      },
+      {
+        name: "og:image:height",
+        content: "480",
+      },
     ];
   } else {
     steamAppMetaTags = [
