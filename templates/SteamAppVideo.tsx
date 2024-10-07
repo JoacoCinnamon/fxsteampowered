@@ -44,20 +44,12 @@ export const SteamAppVideo = async (
         content: videoUrl,
       },
       {
-        name: "twitter:player:width",
-        content: "1200",
-      },
-      {
-        name: "twitter:player:height",
-        content: "600",
-      },
-      {
-        name: "og:image:width",
-        content: "1200",
-      },
-      {
-        name: "og:image:height",
-        content: "600",
+        name: "og:description",
+        content: `${
+          steamApp.recommendations?.total
+            ? `📝 ${steamApp.recommendations.total}`
+            : "No existen reseñas de usuarios"
+        }`,
       },
     ];
   } else {
