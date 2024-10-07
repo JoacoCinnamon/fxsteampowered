@@ -43,6 +43,14 @@ export const SteamAppVideo = async (
         content: videoUrl,
       },
       {
+        name: "twitter:player:width",
+        content: "854",
+      },
+      {
+        name: "twitter:player:height",
+        content: "480",
+      },
+      {
         name: "og:image:width",
         content: "854",
       },
