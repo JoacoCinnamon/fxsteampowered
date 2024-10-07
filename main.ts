@@ -3,9 +3,13 @@ import { serveStatic } from "hono/deno";
 import { logger } from "hono/logger";
 import { appendTrailingSlash } from "hono/trailing-slash";
 
-import { fetchSteamApp, isSteamApiResponseError } from "@/steam/services.ts";
+import {
+  fetchSteamApp,
+  getAppUrl,
+  isSteamApiResponseError,
+} from "@/steam/services.ts";
 import generateAlternate from "@/utils/generateAlternate.ts";
-import { GITHUB_REPO_URL } from "@/conts.ts";
+import { BOT_REGEX, GITHUB_REPO_URL } from "@/conts.ts";
 import { SteamAppVideo } from "@/templates/SteamAppVideo.tsx";
 
 const app = new Hono({ strict: true });
@@ -29,6 +33,11 @@ app.get("/", () => {
 app.get("/app/:id/", async (c) => {
   const appId = c.req.param("id");
 
+  // If the user agent is a bot, redirect to the Steam page
+  if (!BOT_REGEX.test(c.req.header("User-Agent") || "")) {
+    return c.redirect(getAppUrl(appId), 302);
+  }
+
   const [err, appResponse] = await fetchSteamApp(appId);
   if (err) {
     console.error(err);
@@ -47,6 +56,11 @@ app.get("/app/:id/", async (c) => {
 // TODO: Show proper error
 app.get("/app/:id/:slug/", async (c) => {
   const appId = c.req.param("id");
+
+  // If the user agent is a bot, redirect to the Steam page
+  if (!BOT_REGEX.test(c.req.header("User-Agent") || "")) {
+    return c.redirect(getAppUrl(appId), 302);
+  }
 
   const [err, appResponse] = await fetchSteamApp(appId);
   if (err) {
