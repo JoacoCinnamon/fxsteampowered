@@ -1,22 +1,29 @@
-import type { PropsWithChildren } from "hono/jsx"
+import type { PropsWithChildren } from "hono/jsx";
 import { html } from "hono/html";
 
 type BaseHtmlProps = {
   tags: {
-    name: string
-    content: string | null
-  }[],
+    name: string;
+    content: string | null;
+  }[];
   alternate?: {
-    [key: string]: string | number
-  }
+    [key: string]: string | number;
+  };
 };
 
-export const BaseHtml = ({ tags, alternate, children }: PropsWithChildren<BaseHtmlProps>) => {
-  const alternateUrl = new URL("https://fxsteampowered.deno.dev/generate/alternate")
+export const BaseHtml = (
+  { tags, alternate, children }: PropsWithChildren<BaseHtmlProps>,
+) => {
+  const alternateUrl = new URL(
+    "https://fxsteampowered.deno.dev/generate/alternate",
+  );
 
   if (alternate) {
     for (const key in alternate) {
-      alternateUrl.searchParams.set(key, encodeURIComponent(alternate[key].toString()))
+      alternateUrl.searchParams.set(
+        key,
+        encodeURIComponent(alternate[key].toString()),
+      );
     }
   }
 
@@ -26,8 +33,19 @@ export const BaseHtml = ({ tags, alternate, children }: PropsWithChildren<BaseHt
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
 
-        {tags.map((tag) => (tag.content ? <meta property={tag.name} content={tag.content} /> : null))}
-        {alternate ? <link rel="alternate" href={alternateUrl.toString()} type="application/json+oembed" /> : null}
+        {tags.map((tag) => (tag.content
+          ? <meta property={tag.name} content={tag.content} />
+          : null)
+        )}
+        {alternate
+          ? (
+            <link
+              rel="alternate"
+              href={alternateUrl.toString()}
+              type="application/json+oembed"
+            />
+          )
+          : null}
 
         {children}
 
@@ -55,5 +73,5 @@ export const BaseHtml = ({ tags, alternate, children }: PropsWithChildren<BaseHt
         <div class="steam-header" />
       </body>
     </html>
-  )
-}
+  );
+};
