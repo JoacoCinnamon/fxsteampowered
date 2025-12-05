@@ -48,9 +48,14 @@ app.get("/app/:id/", async (c) => {
   }
   const steamApp = appResponse[appId].data;
 
-  return c.html(SteamAppVideo({ steamApp }), 200, {
-    "Cache-Control": "public, max-age=3600",
-  });
+  try {
+    return c.html(SteamAppVideo({ steamApp }), 200, {
+      "Cache-Control": "public, max-age=3600",
+    });
+  } catch (error) {
+    console.error(error);
+    return c.redirect(getAppUrl(appId), 302);
+  }
 });
 
 // TODO: Show proper error
@@ -72,9 +77,14 @@ app.get("/app/:id/:slug/", async (c) => {
   }
   const steamApp = appResponse[appId].data;
 
-  return c.html(SteamAppVideo({ steamApp }), 200, {
-    "Cache-Control": "public, max-age=3600",
-  });
+  try {
+    return c.html(SteamAppVideo({ steamApp }), 200, {
+      "Cache-Control": "public, max-age=3600",
+    });
+  } catch (error) {
+    console.error(error);
+    return c.redirect(getAppUrl(appId), 302);
+  }
 });
 
 app.get("/generate/alternate", (c) => {
