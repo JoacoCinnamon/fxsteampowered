@@ -16,7 +16,7 @@ export const SteamAppVideo = async (
   let steamAppMetaTags: { name: string; content: string }[] = [];
 
   if (steamApp.movies && steamApp.movies.length > 0) {
-    let videoUrl = steamApp.movies[0].webm["480"];
+    let videoUrl = steamApp.movies[0].hls_h264;
     if (videoUrl.includes("?t=")) videoUrl = videoUrl.split("?t=")[0];
     steamAppMetaTags = [
       {

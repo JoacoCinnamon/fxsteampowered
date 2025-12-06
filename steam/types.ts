@@ -153,14 +153,10 @@ export type Movie = {
   id: number;
   name: string;
   thumbnail: string;
-  webm: MimeVideoQuality;
-  mp4: MimeVideoQuality;
+  dash_av1: string;
+  dash_h264: string;
+  hls_h264: string;
   highlight: boolean;
-};
-
-export type MimeVideoQuality = {
-  "480": string;
-  max: string;
 };
 
 export type PackageGroup = {
